@@ -3,6 +3,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class Calculator {
 
     public static void main(String[] args)  {
@@ -15,39 +16,33 @@ public class Calculator {
     public static String consoleGet(){
         System.out.println("Enter something:");
         Scanner in = new Scanner(System.in);
-        String s = in.nextLine();
-        //System.out.println("You are enter:"+s);
-        return s;
+        return in.nextLine();
 
     }
 
     public static String romeOut(Integer i, Map s){
-        int iHi = 0, iLo = 0;
         String out = "";
-        iLo = (i%10);
-        iHi = i - iLo;
+        int iLo = (i%10);
+        int iHi = i - iLo;
         if( iHi>0 & iLo>0) {
-            return s.get(iHi).toString()+s.get(iLo).toString();
+            out = s.get(iHi).toString()+s.get(iLo).toString();
         }
         else if ( iHi>0 & iLo==0) {
-            return s.get(iHi).toString();
+            out = s.get(iHi).toString();
         }
         else if (iLo>=0) {
-            return s.get(iLo).toString();
+            out = s.get(iLo).toString();
         }
-        else System.out.println("Exeption!!");
+        else System.out.println("Exception!!");
         return out;
     }
     public static String calc(String st){
         String result = "";
         int operandes = 0; // Кол-во операторов в принятой строке
         char operand = '?'; // Операнд арифм. операции
-        int lSide = 0, rSide = 0; //lSide и rSide обозначают систему счисл. левой и правой части выражения, где 0 не определена, 1 арабская, 2 римская
+        int lSide = 0, rSide = 0; //lSide и rSide обозначают систему счисл. левой и правой части выражения, где 0 не определена, 1 арабская, 3 римская
         int lSVal = 0, rSVal = 0;
 
-        // System.out.println("Ihi = "+iHi);
-//    Scanner s = new Scanner();
-//    s.close();
         Map<Integer, String> s = new TreeMap<>();
         //  s.put(0, "null");
         s.put(1, "I");
@@ -103,16 +98,16 @@ public class Calculator {
         stSplit[1] = stSplit[1].strip();
         try {
             lSVal = Integer.parseInt(stSplit[0]);
-            if (lSVal > 0) lSide = 1;
+            lSide = 1;
         }
-        catch (NumberFormatException nfe) {
+        catch (NumberFormatException ignored) {
 
         }
         try {
             rSVal = Integer.parseInt(stSplit[1]);
-            if (rSVal > 0) rSide = 1;
+            rSide = 1;
         }
-        catch (NumberFormatException nfe) {
+        catch (NumberFormatException ignored) {
 
         }
         if (lSide == 0) { // Если в левой части выражения не найдены арабские цифры
@@ -166,15 +161,15 @@ public class Calculator {
         }
 
 
-        switch (operand) {
-            case ('*'):
-                if(lSide == 1) result = String.valueOf(lSVal*rSVal);
-                else result = romeOut(lSVal*rSVal,s);
-                break;
-            case ('/'):
-                if(lSide == 1) result = String.valueOf(lSVal/rSVal);
-                else{
-                    if(lSVal/rSVal<1) {
+        switch (operand) {  // Выбор арифметической операции
+            case ('*') -> {
+                if (lSide == 1) result = String.valueOf(lSVal * rSVal);
+                else result = romeOut(lSVal * rSVal, s);
+            }
+            case ('/') -> {
+                if (lSide == 1) result = String.valueOf(lSVal / rSVal);
+                else {
+                    if (lSVal / rSVal < 1) {
                         try {
                             throw new IOException();
                         } catch (IOException e) {
@@ -182,30 +177,24 @@ public class Calculator {
 
                         }
 
-                    }
-                    else result = romeOut(lSVal/rSVal,s);
+                    } else result = romeOut(lSVal / rSVal, s);
                 }
-
-                break;
-            case ('+'):
-                if(lSide == 1) result = String.valueOf(lSVal+rSVal);
-                else result = romeOut(lSVal+rSVal,s);
-                break;
-            case ('-'):
-                if(lSide == 1) result = String.valueOf(lSVal-rSVal);
-                else
-                if(lSVal-rSVal<1){
+            }
+            case ('+') -> {
+                if (lSide == 1) result = String.valueOf(lSVal + rSVal);
+                else result = romeOut(lSVal + rSVal, s);
+            }
+            case ('-') -> {
+                if (lSide == 1) result = String.valueOf(lSVal - rSVal);
+                else if (lSVal - rSVal < 1) {
                     try {
                         throw new IOException();
                     } catch (IOException e) {
                         System.out.println("throws Exception //т.к. в римской системе нет отрицательных чисел");
 
                     }
-                }
-                else result = romeOut(lSVal-rSVal,s);
-                break;
-
-
+                } else result = romeOut(lSVal - rSVal, s);
+            }
         }
 
         return result;
