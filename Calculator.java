@@ -6,6 +6,40 @@ import java.util.Map;
 public class Calculator {
 
     public static void main(String[] args)  {
+         String st = consoleGet();
+         String result = calc(st);
+         System.out.println(result);
+
+
+    }
+    public static String consoleGet(){
+        System.out.println("Enter something:");
+        Scanner in = new Scanner(System.in);
+        String s = in.nextLine();
+        //System.out.println("You are enter:"+s);
+        return s;
+
+    }
+
+    public static String romeOut(Integer i, Map s){
+        int iHi = 0, iLo = 0;
+        String out = "";
+        iLo = (i%10);
+        iHi = i - iLo;
+        if( iHi>0 & iLo>0) {
+            return s.get(iHi).toString()+s.get(iLo).toString();
+        }
+        else if ( iHi>0 & iLo==0) {
+            return s.get(iHi).toString();
+        }
+        else if (iLo>=0) {
+            return s.get(iLo).toString();
+        }
+        else System.out.println("Exeption!!");
+        return out;
+    }
+    public static String calc(String st){
+        String result = "";
         int operandes = 0; // Кол-во операторов в принятой строке
         char operand = '?'; // Операнд арифм. операции
         int lSide = 0, rSide = 0; //lSide и rSide обозначают систему счисл. левой и правой части выражения, где 0 не определена, 1 арабская, 2 римская
@@ -35,27 +69,15 @@ public class Calculator {
         s.put(80, "LXXX");
         s.put(90, "XC");
         s.put(100, "C");
-        String st = consoleGet();
         //Подсчет количества операторов и определение оператора
         char[] a = st.toCharArray();
         for (char ilt : a) {
             switch (ilt) {
-                case ('*'):
+                case '*','/','+','-' -> {
                     operand = ilt;
                     ++operandes;
-                    break;
-                case ('/'):
-                    operand = ilt;
-                    ++operandes;
-                    break;
-                case ('+'):
-                    operand = ilt;
-                    ++operandes;
-                    break;
-                case ('-'):
-                    operand = ilt;
-                    ++operandes;
-                    break;
+                }
+
             }
         }
         // Выброс Exception если кол-во операторов != 1
@@ -64,19 +86,19 @@ public class Calculator {
                 throw new IOException();
             } catch (IOException e) {
                 System.out.println("throws Exception //т.к. формат математической операции не удовлетворяет заданию - два положительных операнда и один оператор (+, -, /, *)");
-                return;
+
             }
         } else if (operandes == 0) {
             try {
                 throw new IOException();
             } catch (IOException e) {
                 System.out.println("throws Exception //т.к. строка не является математической операцией");
-                return;
+
             }
 
         }
         st = st.toUpperCase();
-        String[] stSplit = st.split("["+String.valueOf(operand)+"]");
+        String[] stSplit = st.split("["+operand+"]");
         stSplit[0] = stSplit[0].strip(); // Удаляем лишние пробелы в левой и правой части
         stSplit[1] = stSplit[1].strip();
         try {
@@ -114,7 +136,7 @@ public class Calculator {
                 throw new IOException();
             } catch (IOException e) {
                 System.out.println("throws Exception //т.к на вход допустимы только целые числа от 1 до 10");
-                return;
+
             }
         }
         if((rSide+lSide)==0) {
@@ -122,7 +144,7 @@ public class Calculator {
                 throw new IOException();
             } catch (IOException e) {
                 System.out.println("throws Exception //т.к. формат математической операции не удовлетворяет заданию - два положительных операнда и один оператор (+, -, /, *)");
-                return;
+
             }
         }
 
@@ -131,7 +153,7 @@ public class Calculator {
                 throw new IOException();
             } catch (IOException e) {
                 System.out.println("throws Exception //т.к. используются одновременно разные системы счисления");
-                return;
+
             }
         }
         if((rSide+lSide)==3||((rSide+lSide)==6&&(rSVal>10||lSVal>10))) {
@@ -139,82 +161,55 @@ public class Calculator {
                 throw new IOException();
             } catch (IOException e) {
                 System.out.println("throws Exception //т.к. допустимые числа в римской системе счисления не обнаружены");
-                return;
+
             }
         }
 
 
         switch (operand) {
             case ('*'):
-                if(lSide == 1) System.out.println(lSVal*rSVal);
-                else System.out.println(romeOut(lSVal*rSVal,s));
+                if(lSide == 1) result = String.valueOf(lSVal*rSVal);
+                else result = romeOut(lSVal*rSVal,s);
                 break;
             case ('/'):
-                if(lSide == 1) System.out.println(lSVal/rSVal);
+                if(lSide == 1) result = String.valueOf(lSVal/rSVal);
                 else{
                     if(lSVal/rSVal<1) {
                         try {
                             throw new IOException();
                         } catch (IOException e) {
                             System.out.println("throws Exception //т.к. в римском счислении не используются числа менее 1");
-                            return;
+
                         }
 
                     }
-                    else System.out.println(romeOut(lSVal/rSVal,s));
+                    else result = romeOut(lSVal/rSVal,s);
                 }
 
                 break;
             case ('+'):
-                if(lSide == 1) System.out.println(lSVal+rSVal);
-                else System.out.println(romeOut(lSVal+rSVal,s));
+                if(lSide == 1) result = String.valueOf(lSVal+rSVal);
+                else result = romeOut(lSVal+rSVal,s);
                 break;
             case ('-'):
-                if(lSide == 1) System.out.println(lSVal-rSVal);
+                if(lSide == 1) result = String.valueOf(lSVal-rSVal);
                 else
                 if(lSVal-rSVal<1){
                     try {
                         throw new IOException();
                     } catch (IOException e) {
                         System.out.println("throws Exception //т.к. в римской системе нет отрицательных чисел");
-                        return;
+
                     }
                 }
-                else System.out.println(romeOut(lSVal-rSVal,s));
+                else result = romeOut(lSVal-rSVal,s);
                 break;
 
 
         }
 
-
+        return result;
     }
-    public static String consoleGet(){
-        System.out.println("Enter something:");
-        Scanner in = new Scanner(System.in);
-        String s = in.nextLine();
-        //System.out.println("You are enter:"+s);
-        return s;
-
-    }
-
-    public static String romeOut(Integer i, Map s){
-        int iHi = 0, iLo = 0;
-        String out = "";
-        iLo = (i%10);
-        iHi = i - iLo;
-        if( iHi>0 & iLo>0) {
-            return s.get(iHi).toString()+s.get(iLo).toString();
-        }
-        else if ( iHi>0 & iLo==0) {
-            return s.get(iHi).toString();
-        }
-        else if (iLo>=0) {
-            return s.get(iLo).toString();
-        }
-        else System.out.println("Exeption!!");
-        return out;
-    }
-
 
 }
 
