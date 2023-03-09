@@ -3,7 +3,6 @@ import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.Map;
 
-@SuppressWarnings("ALL")
 public class Calculator {
 
     public static void main(String[] args)  {
