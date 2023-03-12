@@ -95,7 +95,7 @@ public class Calculator {
         }
         st = st.toUpperCase();
         String[] stSplit = st.split("["+operand+"]");
-        if(stSplit.length<2){
+        if(stSplit.length<2){ // Проверяем наличие правой части выражения
             System.out.println("Output:");
             System.out.println("throws Exception //т.к. строка не является математической операцией");
             throw new IOException();
@@ -137,13 +137,13 @@ public class Calculator {
                 System.out.println("throws Exception //т.к на вход допустимы только целые числа от 1 до 10");
                 throw new IOException();
         }
-        if((rSide+lSide)==0) {
+        if((rSide+lSide)==0) { // Ни справа, ни слева не обнаружены арабские или римские цифры
                 System.out.println("Output:");
                 System.out.println("throws Exception //т.к. формат математической операции не удовлетворяет заданию - два положительных операнда и один оператор (+, -, /, *)");
                 throw new IOException();
         }
 
-        if((rSide+lSide)==4) {
+        if((rSide+lSide)==4) { // С одной стороны арабская цифра, с другой римская
                 System.out.println("Output:");
                 System.out.println("throws Exception //т.к. используются одновременно разные системы счисления");
                 throw new IOException();
