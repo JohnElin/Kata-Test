@@ -42,7 +42,6 @@ public class Calculator {
         else if (iLo>=0) {
             out = s.get(iLo).toString();
         }
-     //   else System.out.println("Exception!!");
         return out;
     }
     public static String calc(String st) throws IOException {
@@ -96,6 +95,11 @@ public class Calculator {
         }
         st = st.toUpperCase();
         String[] stSplit = st.split("["+operand+"]");
+        if(stSplit.length<2){
+            System.out.println("Output:");
+            System.out.println("throws Exception //т.к. строка не является математической операцией");
+            throw new IOException();
+        }
         stSplit[0] = stSplit[0].strip(); // Удаляем лишние пробелы в левой и правой части
         stSplit[1] = stSplit[1].strip();
         try {
@@ -140,16 +144,21 @@ public class Calculator {
         }
 
         if((rSide+lSide)==4) {
-
                 System.out.println("Output:");
                 System.out.println("throws Exception //т.к. используются одновременно разные системы счисления");
                 throw new IOException();
         }
-        if((rSide+lSide)==3||((rSide+lSide)==6&&(rSVal>10||lSVal>10))) {
+        if((rSide+lSide)==3) { // Только слева или справа обнаружена римская цифра, но не обнаружена арабская
                 System.out.println("Output:");
                 System.out.println("throws Exception //т.к. допустимые числа в римской системе счисления не обнаружены");
                 throw new IOException();
         }
+        if((rSide+lSide)==6&&(rSVal>10||lSVal>10)) { // Проверка на величину римских цифр
+            System.out.println("Output:");
+            System.out.println("throws Exception //т.к на вход допустимы только числа от I до X");
+            throw new IOException();
+        }
+
 
 
         switch (operand) {  // Выбор арифметической операции
