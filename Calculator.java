@@ -7,13 +7,23 @@ public class Calculator {
 
     public static void main(String[] args)  {
          String st = consoleGet();
-         String result = calc(st);
-         System.out.println(result);
+         String result = "";
+         int err = 0;
 
+         try {
+             result = calc(st);
+         }
+         catch (IOException nfc) {
+             err = 1;
+         }
+        if(err !=1) {
+            System.out.println("Output:");
+           System.out.println(result);
+        }
 
     }
     public static String consoleGet(){
-        System.out.println("Enter something:");
+        System.out.println("Input:");
         Scanner in = new Scanner(System.in);
         return in.nextLine();
 
@@ -32,10 +42,10 @@ public class Calculator {
         else if (iLo>=0) {
             out = s.get(iLo).toString();
         }
-        else System.out.println("Exception!!");
+     //   else System.out.println("Exception!!");
         return out;
     }
-    public static String calc(String st){
+    public static String calc(String st) throws IOException {
         String result = "";
         int operandes = 0; // Кол-во операторов в принятой строке
         char operand = '?'; // Операнд арифм. операции
@@ -76,20 +86,13 @@ public class Calculator {
         }
         // Выброс Exception если кол-во операторов != 1
         if (operandes > 1) {
-            try {
-                throw new IOException();
-            } catch (IOException e) {
+                System.out.println("Output:");
                 System.out.println("throws Exception //т.к. формат математической операции не удовлетворяет заданию - два положительных операнда и один оператор (+, -, /, *)");
-
-            }
-        } else if (operandes == 0) {
-            try {
                 throw new IOException();
-            } catch (IOException e) {
+        } else if (operandes == 0) {
+                System.out.println("Output:");
                 System.out.println("throws Exception //т.к. строка не является математической операцией");
-
-            }
-
+                throw new IOException();
         }
         st = st.toUpperCase();
         String[] stSplit = st.split("["+operand+"]");
@@ -126,37 +129,26 @@ public class Calculator {
             }
         }
         if ((rSide+lSide)==2&&(rSVal<1||lSVal<1||rSVal>10||lSVal>10)) { // Проверка арабских цифр на соответствие условиям
-            try {
-                throw new IOException();
-            } catch (IOException e) {
+                System.out.println("Output:");
                 System.out.println("throws Exception //т.к на вход допустимы только целые числа от 1 до 10");
-
-            }
+                throw new IOException();
         }
         if((rSide+lSide)==0) {
-            try {
-                throw new IOException();
-            } catch (IOException e) {
+                System.out.println("Output:");
                 System.out.println("throws Exception //т.к. формат математической операции не удовлетворяет заданию - два положительных операнда и один оператор (+, -, /, *)");
-
-            }
+                throw new IOException();
         }
 
         if((rSide+lSide)==4) {
-            try {
-                throw new IOException();
-            } catch (IOException e) {
-                System.out.println("throws Exception //т.к. используются одновременно разные системы счисления");
 
-            }
+                System.out.println("Output:");
+                System.out.println("throws Exception //т.к. используются одновременно разные системы счисления");
+                throw new IOException();
         }
         if((rSide+lSide)==3||((rSide+lSide)==6&&(rSVal>10||lSVal>10))) {
-            try {
-                throw new IOException();
-            } catch (IOException e) {
+                System.out.println("Output:");
                 System.out.println("throws Exception //т.к. допустимые числа в римской системе счисления не обнаружены");
-
-            }
+                throw new IOException();
         }
 
 
@@ -169,13 +161,9 @@ public class Calculator {
                 if (lSide == 1) result = String.valueOf(lSVal / rSVal);
                 else {
                     if (lSVal / rSVal < 1) {
-                        try {
-                            throw new IOException();
-                        } catch (IOException e) {
+                            System.out.println("Output:");
                             System.out.println("throws Exception //т.к. в римском счислении не используются числа менее 1");
-
-                        }
-
+                            throw new IOException();
                     } else result = romeOut(lSVal / rSVal, s);
                 }
             }
@@ -186,12 +174,8 @@ public class Calculator {
             case ('-') -> {
                 if (lSide == 1) result = String.valueOf(lSVal - rSVal);
                 else if (lSVal - rSVal < 1) {
-                    try {
-                        throw new IOException();
-                    } catch (IOException e) {
                         System.out.println("throws Exception //т.к. в римской системе нет отрицательных чисел");
-
-                    }
+                        throw new IOException();
                 } else result = romeOut(lSVal - rSVal, s);
             }
         }
